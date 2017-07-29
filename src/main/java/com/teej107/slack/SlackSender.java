@@ -101,15 +101,17 @@ public class SlackSender implements HttpHandler
 				return;
 		}
 
-		final String broadcast = String.format(ChatColor.translateAlternateColorCodes('&', format), username, text);
+		//final String broadcast = String.format(ChatColor.translateAlternateColorCodes('&', format), username, text);
+		final String finalName = username;
+		final String finalText = text;
 		new BukkitRunnable()
 		{
 			@Override
 			public void run()
 			{
-				Bukkit.broadcastMessage(broadcast);
+				new MessageSentFromSlackEvent(finalName, finalText);
+				//Bukkit.broadcastMessage(broadcast);
 			}
 		}.runTask(plugin);
-		//TODO: PurpleIRC integration
 	}
 }
