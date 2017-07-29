@@ -47,6 +47,12 @@ public class SlackCommandSender implements CommandSender
 	}
 
 	@Override
+	public Spigot spigot()
+	{
+		return null;
+	}
+
+	@Override
 	public boolean isPermissionSet(String s)
 	{
 		return false;
