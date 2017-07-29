@@ -20,17 +20,16 @@ import java.util.regex.Pattern;
  */
 public class SlackSender implements HttpHandler
 {
-	private Plugin plugin;
+	private Slack plugin;
 	private final String token, format;
 	private HttpServer server;
 
-	public SlackSender(Plugin plugin, int port, String token, String format) throws IOException
+	public SlackSender(Slack plugin, int port, String token, String format) throws IOException
 	{
 		this.plugin = plugin;
 		this.token = token;
 		this.format = format;
 		String ip = Bukkit.getIp();
-		debug("Bukkit#getIP: " + ip);
 		if (ip == null || ip.isEmpty())
 			ip = "0.0.0.0";
 		InetSocketAddress address = new InetSocketAddress(ip, port);
@@ -44,8 +43,7 @@ public class SlackSender implements HttpHandler
 		if (enabled)
 		{
 			server.start();
-			debug("Server started");
-			debug(server.getAddress().toString());
+			debug("Slack outgoing webhook listener listening on " + server.getAddress().toString());
 		}
 		else
 		{
@@ -56,7 +54,6 @@ public class SlackSender implements HttpHandler
 	@Override
 	public void handle(HttpExchange exchange) throws IOException
 	{
-		debug("received request");
 		String requestMethod = exchange.getRequestMethod();
 		if (requestMethod.equals("POST"))
 		{
@@ -71,7 +68,6 @@ public class SlackSender implements HttpHandler
 
 	private void handleSlackMessage(HttpExchange exchange) throws IOException
 	{
-		debug("received POST");
 		byte[] bytes = ByteStreams.toByteArray(exchange.getRequestBody());
 		String fromBytes = new String(bytes, "UTF-8");
 		String[] contents = fromBytes.split(Pattern.quote("&"));
@@ -86,14 +82,7 @@ public class SlackSender implements HttpHandler
 		}
 		String token = map.get("token");
 		if (token == null || !this.token.equals(token))
-		{
-			debug("Invalid token received.");
 			return;
-		}
-
-		String username = map.get("user_name");
-//		if (username != null && username.equals("slackbot"))
-//			return;
 
 		String text = map.get("text");
 		if (text == null)
@@ -101,6 +90,15 @@ public class SlackSender implements HttpHandler
 		else
 		{
 			text = URLDecoder.decode(text, "UTF-8");
+		}
+
+		//So all bots/integrations that post messages are reported as "slackbot" by Slack's outoging webhook.
+		//Since I still want slackbot messages, I'm gonna make a hacky fix :P
+		String username = map.get("user_name");
+		if (username != null && username.equals("slackbot"))
+		{
+			if (plugin.isRecentlySent(text))
+				return;
 		}
 
 		final String broadcast = String.format(ChatColor.translateAlternateColorCodes('&', format), username, text);

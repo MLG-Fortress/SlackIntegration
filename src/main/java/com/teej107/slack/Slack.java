@@ -19,6 +19,7 @@ import java.util.*;
 public class Slack extends JavaPlugin
 {
 	private static final List<String> EMPTY_LIST = Collections.unmodifiableList(new ArrayList<String>());
+	private static final Map<String, Long> recentlySentMessages = new HashMap<>();
 	private static final String NO_URL = "<url here>";
 
 	private static final String WEBHOOK_URL = "webhook-url";
@@ -186,16 +187,35 @@ public class Slack extends JavaPlugin
 		JSONObject json = new JSONObject();
 		if (text == null || text.isEmpty())
 			return;
-		json.put("text", ChatColor.stripColor(text));
+		text = ChatColor.stripColor(text);
+		json.put("text", text);
 		json.put("username", sender.getName());
 		if(sender instanceof Player)
 		{
 			json.put("icon_url", "https://minotar.net/avatar/" + sender.getName() + ".png");
 		}
+		recentlySentMessages.put(text, System.currentTimeMillis());
 		for (String channel : getChannels())
 		{
 			json.put("channel", channel);
 			slackReceiver.send(json.toJSONString());
 		}
+	}
+
+	public boolean isRecentlySent(String message)
+	{
+		message = ChatColor.stripColor(message);
+
+		//Cleanup expired values. Alternative to this is to schedule a task each time we send a message to remove...
+		long currentTime = System.currentTimeMillis();
+		Iterator<String> sentMessagesIterator = recentlySentMessages.keySet().iterator();
+		while (sentMessagesIterator.hasNext())
+		{
+			String key = sentMessagesIterator.next();
+			if (currentTime - 5000L > recentlySentMessages.get(key))
+				recentlySentMessages.remove(key);
+		}
+
+		return recentlySentMessages.containsKey(message);
 	}
 }
