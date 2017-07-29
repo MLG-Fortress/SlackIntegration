@@ -43,7 +43,7 @@ public class SlackCommandSender implements CommandSender
 	@Override
 	public String getName()
 	{
-		return "[Server]";
+		return "Da_Serbur";
 	}
 
 	@Override
