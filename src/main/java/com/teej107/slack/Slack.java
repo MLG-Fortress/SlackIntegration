@@ -11,6 +11,7 @@ import org.json.simple.JSONObject;
 import java.io.IOException;
 import java.net.URL;
 import java.util.*;
+import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * @author teej107
@@ -19,7 +20,7 @@ import java.util.*;
 public class Slack extends JavaPlugin
 {
 	private static final List<String> EMPTY_LIST = Collections.unmodifiableList(new ArrayList<String>());
-	private static final Map<String, Long> recentlySentMessages = new HashMap<>();
+	private static final Map<String, Long> recentlySentMessages = new ConcurrentHashMap<>();
 	private static final String NO_URL = "<url here>";
 
 	private static final String WEBHOOK_URL = "webhook-url";
