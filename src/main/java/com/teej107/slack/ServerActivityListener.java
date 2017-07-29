@@ -50,4 +50,6 @@ public class ServerActivityListener implements Listener
 			plugin.sendToSlack(SlackCommandSender.getInstance(), event.getDeathMessage());
 		}
 	}
+
+	//TODO: PurpleIRC integration
 }

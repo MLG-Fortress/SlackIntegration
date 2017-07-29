@@ -50,6 +50,7 @@ public class SlackSender implements HttpHandler
 	@Override
 	public void handle(HttpExchange exchange) throws IOException
 	{
+		debug("received request");
 		String requestMethod = exchange.getRequestMethod();
 		if (requestMethod.equals("POST"))
 		{
@@ -57,8 +58,14 @@ public class SlackSender implements HttpHandler
 		}
 	}
 
+	private void debug(String message)
+	{
+		plugin.getLogger().info(message);
+	}
+
 	private void handleSlackMessage(HttpExchange exchange) throws IOException
 	{
+		debug("received POST");
 		byte[] bytes = ByteStreams.toByteArray(exchange.getRequestBody());
 		String fromBytes = new String(bytes, "UTF-8");
 		String[] contents = fromBytes.split(Pattern.quote("&"));
@@ -73,11 +80,14 @@ public class SlackSender implements HttpHandler
 		}
 		String token = map.get("token");
 		if (token == null || !this.token.equals(token))
+		{
+			debug("Invalid token received.");
 			return;
+		}
 
 		String username = map.get("user_name");
-		if (username != null && username.equals("slackbot"))
-			return;
+//		if (username != null && username.equals("slackbot"))
+//			return;
 
 		String text = map.get("text");
 		if (text == null)
@@ -96,5 +106,6 @@ public class SlackSender implements HttpHandler
 				Bukkit.broadcastMessage(broadcast);
 			}
 		}.runTask(plugin);
+		//TODO: PurpleIRC integration
 	}
 }
