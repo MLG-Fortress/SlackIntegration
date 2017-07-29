@@ -184,9 +184,10 @@ public class Slack extends JavaPlugin
 	public void sendToSlack(CommandSender sender, String text)
 	{
 		JSONObject json = new JSONObject();
+		if (text == null || text.isEmpty())
+			return;
 		json.put("text", ChatColor.stripColor(text));
 		json.put("username", sender.getName());
-		getLogger().info(sender.getName());
 		if(sender instanceof Player)
 		{
 			json.put("icon_url", "https://minotar.net/avatar/" + sender.getName() + ".png");
