@@ -201,6 +201,27 @@ public class Slack extends JavaPlugin
 		}
 	}
 
+	//yea yea (semi) copy paste I got it
+	public void sendToSlack(String name, String text, boolean avatar)
+	{
+		JSONObject json = new JSONObject();
+		if (text == null || text.isEmpty())
+			return;
+		text = ChatColor.stripColor(text);
+		json.put("text", text);
+		json.put("username", name);
+		if(avatar)
+		{
+			json.put("icon_url", "https://minotar.net/avatar/" + name + ".png");
+		}
+		recentlySentMessages.put(text, System.currentTimeMillis());
+		for (String channel : getChannels())
+		{
+			json.put("channel", channel);
+			slackReceiver.send(json.toJSONString());
+		}
+	}
+
 	public boolean isRecentlySent(String message)
 	{
 		message = ChatColor.stripColor(message);
