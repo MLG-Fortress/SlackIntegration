@@ -34,7 +34,7 @@ public class AsyncPlayerChatListener implements Listener
 				if (event.getRecipients().size() < 2)
 					return;
 		}
-		
+
 		plugin.sendToSlack(event.getPlayer(), event.getMessage());
 	}
 }

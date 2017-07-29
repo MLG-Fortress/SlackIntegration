@@ -189,6 +189,10 @@ public class Slack extends JavaPlugin
 		{
 			json.put("icon_url", "https://minotar.net/avatar/" + sender.getName() + ".png");
 		}
+		else
+		{
+			json.put("icon_url", "https://github.com/MLG-Fortress/Slack-Avatars/blob/master/MLG.png");
+		}
 		for (String channel : getChannels())
 		{
 			json.put("channel", channel);
