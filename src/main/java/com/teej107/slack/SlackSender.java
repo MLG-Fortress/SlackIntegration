@@ -31,7 +31,7 @@ public class SlackSender implements HttpHandler
 		this.format = format;
 		String ip = Bukkit.getIp();
 		debug("Bukkit#getIP: " + ip);
-		if (ip == null || ip.equals("127.0.0.1"))
+		if (ip == null || ip.isEmpty())
 			ip = "0.0.0.0";
 		InetSocketAddress address = new InetSocketAddress(ip, port);
 		server = HttpServer.create(address, 0);

@@ -33,14 +33,14 @@ public class ServerActivityListener implements Listener
 	@EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
 	public void onJoin(PlayerJoinEvent event)
 	{
-		String joinMessage = event.getPlayer().getName() + "IZ BAK 4 MOAR MEINKRAFT!!!!!!1111111111!!!1";
+		String joinMessage = event.getPlayer().getName() + " IZ BAK 4 MOAR MEINKRAFT!!!!!!1111111111!!!1";
 		plugin.sendToSlack(SlackCommandSender.getInstance(), joinMessage);
 	}
 
 	@EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
 	public void onQuit(PlayerQuitEvent event)
 	{
-		String quitMessage = event.getPlayer().getName() + "left us in lonliness :c";
+		String quitMessage = event.getPlayer().getName() + " left us in loneliness :c";
 		plugin.sendToSlack(SlackCommandSender.getInstance(), quitMessage);
 	}
 
