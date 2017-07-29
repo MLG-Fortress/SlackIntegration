@@ -50,15 +50,4 @@ public class ServerActivityListener implements Listener
 			plugin.sendToSlack(SlackCommandSender.getInstance(), event.getDeathMessage());
 		}
 	}
-
-	@EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
-	public void onAchievementGet(PlayerAchievementAwardedEvent event)
-	{
-		if (plugin.isSendAchievements())
-		{
-			plugin.sendToSlack(SlackCommandSender.getInstance(),
-					event.getPlayer().getName() + " has just earned the achievement [" + normalize(event.getAchievement().toString())
-							+ "]");
-		}
-	}
 }
