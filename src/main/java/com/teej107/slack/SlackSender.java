@@ -40,6 +40,8 @@ public class SlackSender implements HttpHandler
 		if (enabled)
 		{
 			server.start();
+			debug("Server started");
+			debug(server.getAddress().toString());
 		}
 		else
 		{
