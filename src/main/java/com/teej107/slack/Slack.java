@@ -3,6 +3,7 @@ package com.teej107.slack;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
+import org.bukkit.entity.Player;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.json.simple.JSONObject;
@@ -185,13 +186,9 @@ public class Slack extends JavaPlugin
 		JSONObject json = new JSONObject();
 		json.put("text", ChatColor.stripColor(text));
 		json.put("username", sender.getName());
-		if(!(sender instanceof SlackCommandSender))
+		if(sender instanceof Player)
 		{
 			json.put("icon_url", "https://minotar.net/avatar/" + sender.getName() + ".png");
-		}
-		else
-		{
-			json.put("icon_url", "https://github.com/MLG-Fortress/Slack-Avatars/blob/master/MLG.png");
 		}
 		for (String channel : getChannels())
 		{
