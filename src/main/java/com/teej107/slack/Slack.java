@@ -212,6 +212,7 @@ public class Slack extends JavaPlugin
 		text = ChatColor.stripColor(text);
 		json.put("text", text);
 		json.put("username", name);
+		json.put("mrkdwn", false);
 		if(avatar)
 		{
 			json.put("icon_url", "https://minotar.net/avatar/" + name + ".png");

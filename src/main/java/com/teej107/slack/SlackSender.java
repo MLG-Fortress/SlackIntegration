@@ -12,6 +12,7 @@ import java.net.InetSocketAddress;
 import java.net.URLDecoder;
 import java.util.HashMap;
 import java.util.concurrent.Executors;
+import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 /**
@@ -66,6 +67,10 @@ public class SlackSender implements HttpHandler
 		plugin.getLogger().info(message);
 	}
 
+	Pattern leftAngleBracket = Pattern.compile("&lt;");
+	Pattern rightAngleBracket = Pattern.compile("&lt;");
+	Pattern ampersand = Pattern.compile("&lt;");
+
 	private void handleSlackMessage(HttpExchange exchange) throws IOException
 	{
 		byte[] bytes = ByteStreams.toByteArray(exchange.getRequestBody());
@@ -91,6 +96,10 @@ public class SlackSender implements HttpHandler
 		{
 			text = URLDecoder.decode(text, "UTF-8");
 		}
+
+		text = leftAngleBracket.matcher(text).replaceAll("<");
+		text = rightAngleBracket.matcher(text).replaceAll(">");
+		text = ampersand.matcher(text).replaceAll("&");
 
 		//So all bots/integrations that post messages are reported as "slackbot" by Slack's outoging webhook.
 		//Since I still want slackbot messages, I'm gonna make a hacky fix :P
