@@ -213,6 +213,7 @@ public class Slack extends JavaPlugin
 		json.put("text", text);
 		json.put("username", name);
 		json.put("mrkdwn", false);
+		json.put("parse", "full");
 		if(avatar)
 		{
 			json.put("icon_url", "https://minotar.net/avatar/" + name + ".png");
