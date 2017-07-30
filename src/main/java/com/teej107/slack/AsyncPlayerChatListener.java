@@ -1,9 +1,8 @@
 package com.teej107.slack;
 
-import me.ryanhamshire.GriefPrevention.DataStore;
-import me.ryanhamshire.GriefPrevention.GriefPrevention;
-import org.bukkit.Bukkit;
-import org.bukkit.event.*;
+import org.bukkit.event.EventHandler;
+import org.bukkit.event.EventPriority;
+import org.bukkit.event.Listener;
 import org.bukkit.event.player.AsyncPlayerChatEvent;
 
 /**
@@ -12,29 +11,16 @@ import org.bukkit.event.player.AsyncPlayerChatEvent;
  */
 public class AsyncPlayerChatListener implements Listener
 {
-	private Slack plugin;
+    private Slack plugin;
 
-	public AsyncPlayerChatListener(Slack plugin)
-	{
-		this.plugin = plugin;
-	}
-	GriefPrevention gp = (GriefPrevention)Bukkit.getPluginManager().getPlugin("GriefPrevention");
+    public AsyncPlayerChatListener(Slack plugin)
+    {
+        this.plugin = plugin;
+    }
 
-	@EventHandler (priority = EventPriority.MONITOR, ignoreCancelled = true)
-	public void onAsyncChat(AsyncPlayerChatEvent event)
-	{
-		if (gp.dataStore != null)
-		{
-			//If a player is softmuted in GriefPrevention, ignore
-			if (gp.dataStore.isSoftMuted(event.getPlayer().getUniqueId()))
-				return;
-
-			//If a player's spam is muted by GriefPrevention, ignore
-			if (Bukkit.getOnlinePlayers().size() > 1) //Impossible to tell if GP is filtering spam when only one player is on
-				if (event.getRecipients().size() < 2)
-					return;
-		}
-
-		plugin.sendToSlack(event.getPlayer(), event.getMessage());
-	}
+    @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
+    public void onAsyncChat(AsyncPlayerChatEvent event)
+    {
+        plugin.sendToSlack(event.getPlayer(), event.getMessage());
+    }
 }
