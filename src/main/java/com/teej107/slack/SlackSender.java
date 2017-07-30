@@ -101,7 +101,7 @@ public class SlackSender implements HttpHandler
 				return;
 		}
 
-		//final String broadcast = String.format(ChatColor.translateAlternateColorCodes('&', format), username, text);
+		final String broadcast = String.format(ChatColor.translateAlternateColorCodes('&', format), username, text);
 		final String finalName = username;
 		final String finalText = text;
 		new BukkitRunnable()
@@ -109,8 +109,8 @@ public class SlackSender implements HttpHandler
 			@Override
 			public void run()
 			{
-				new MessageSentFromSlackEvent(finalName, finalText);
-				//Bukkit.broadcastMessage(broadcast);
+				plugin.getServer().getPluginManager().callEvent(new MessageSentFromSlackEvent(finalName, finalText));
+				Bukkit.broadcastMessage(broadcast);
 			}
 		}.runTask(plugin);
 	}
