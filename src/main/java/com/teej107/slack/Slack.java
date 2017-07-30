@@ -229,25 +229,25 @@ public class Slack extends JavaPlugin
 		}
 	}
 
-	private Pattern username = Pattern.compile("(@U)\\w+");
-	private Pattern channel = Pattern.compile("(#C)\\w+");
-	private Pattern angleBracketsAmpersand = Pattern.compile("[<>&]");
+	//private Pattern username = Pattern.compile("(@U)\\w+");
+	//private Pattern channel = Pattern.compile("(#C)\\w+");
+	//private Pattern angleBracketsAmpersand = Pattern.compile("[<>&]");
+	private Pattern whatever = Pattern.compile("<(.*?)>");
+	private Pattern tags = Pattern.compile("[@#]\\w+");
 
 	private void addRecentlySentMessage(String message)
 	{
 		message = ChatColor.stripColor(message);
-		message = username.matcher(message).replaceAll("");
-		message = channel.matcher(message).replaceAll("");
-		message = angleBracketsAmpersand.matcher(message).replaceAll("");
+		message = whatever.matcher(message).replaceAll("");
+		message = tags.matcher(message).replaceAll("");
 		recentlySentMessages.put(message, System.currentTimeMillis());
 	}
 
 	public boolean isRecentlySent(String message)
 	{
 		message = ChatColor.stripColor(message);
-		message = username.matcher(message).replaceAll("");
-		message = channel.matcher(message).replaceAll("");
-		message = angleBracketsAmpersand.matcher(message).replaceAll("");
+		message = whatever.matcher(message).replaceAll("");
+		message = tags.matcher(message).replaceAll("");
 
 		//Cleanup expired values. Alternative to this is to schedule a task each time we send a message to remove...
 		long currentTime = System.currentTimeMillis();
