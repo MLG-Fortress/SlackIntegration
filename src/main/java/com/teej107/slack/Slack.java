@@ -12,6 +12,7 @@ import java.io.IOException;
 import java.net.URL;
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.regex.Pattern;
 
 /**
  * @author teej107
@@ -218,7 +219,9 @@ public class Slack extends JavaPlugin
 		{
 			json.put("icon_url", "https://minotar.net/avatar/" + name + ".png");
 		}
-		recentlySentMessages.put(text, System.currentTimeMillis());
+
+		addRecentlySentMessage(text);
+
 		for (String channel : getChannels())
 		{
 			json.put("channel", channel);
@@ -226,9 +229,25 @@ public class Slack extends JavaPlugin
 		}
 	}
 
+	private Pattern username = Pattern.compile("(@U)\\w+");
+	private Pattern channel = Pattern.compile("(#C)\\w+");
+	private Pattern angleBracketsAmpersand = Pattern.compile("[<>&]");
+
+	private void addRecentlySentMessage(String message)
+	{
+		message = ChatColor.stripColor(message);
+		message = username.matcher(message).replaceAll("");
+		message = channel.matcher(message).replaceAll("");
+		message = angleBracketsAmpersand.matcher(message).replaceAll("");
+		recentlySentMessages.put(message, System.currentTimeMillis());
+	}
+
 	public boolean isRecentlySent(String message)
 	{
 		message = ChatColor.stripColor(message);
+		message = username.matcher(message).replaceAll("");
+		message = channel.matcher(message).replaceAll("");
+		message = angleBracketsAmpersand.matcher(message).replaceAll("");
 
 		//Cleanup expired values. Alternative to this is to schedule a task each time we send a message to remove...
 		long currentTime = System.currentTimeMillis();
