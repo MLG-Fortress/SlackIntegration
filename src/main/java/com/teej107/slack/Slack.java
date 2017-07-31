@@ -21,7 +21,7 @@ import java.util.regex.Pattern;
 public class Slack extends JavaPlugin
 {
 	private static final List<String> EMPTY_LIST = Collections.unmodifiableList(new ArrayList<String>());
-	private static final Map<String, Long> recentlySentMessages = new ConcurrentHashMap<>();
+	//private static final Map<String, Long> recentlySentMessages = new ConcurrentHashMap<>();
 	private static final String NO_URL = "<url here>";
 
 	private static final String WEBHOOK_URL = "webhook-url";
@@ -196,7 +196,7 @@ public class Slack extends JavaPlugin
 		{
 			json.put("icon_url", "https://minotar.net/avatar/" + sender.getName() + ".png");
 		}
-		recentlySentMessages.put(text, System.currentTimeMillis());
+		//recentlySentMessages.put(text, System.currentTimeMillis());
 		for (String channel : getChannels())
 		{
 			json.put("channel", channel);
@@ -220,7 +220,7 @@ public class Slack extends JavaPlugin
 			json.put("icon_url", "https://minotar.net/avatar/" + name + ".png");
 		}
 
-		addRecentlySentMessage(text);
+		//addRecentlySentMessage(text);
 
 		for (String channel : getChannels())
 		{
@@ -232,33 +232,34 @@ public class Slack extends JavaPlugin
 	//private Pattern username = Pattern.compile("(@U)\\w+");
 	//private Pattern channel = Pattern.compile("(#C)\\w+");
 	//private Pattern angleBracketsAmpersand = Pattern.compile("[<>&]");
-	private Pattern whatever = Pattern.compile("<(.*?)>");
-	private Pattern tags = Pattern.compile("[@#]\\w+");
+	//private Pattern whatever = Pattern.compile("<(.*?)>");
+	//private Pattern tags = Pattern.compile("[@#]\\w+");
+	//private Pattern url = Pattern.compile("(http)\\w+");
 
-	private void addRecentlySentMessage(String message)
-	{
-		message = ChatColor.stripColor(message);
-		message = whatever.matcher(message).replaceAll("");
-		message = tags.matcher(message).replaceAll("");
-		recentlySentMessages.put(message, System.currentTimeMillis());
-	}
+//	private void addRecentlySentMessage(String message)
+//	{
+//		message = ChatColor.stripColor(message);
+//		message = whatever.matcher(message).replaceAll("");
+//		message = tags.matcher(message).replaceAll("");
+//		recentlySentMessages.put(message, System.currentTimeMillis());
+//	}
 
-	public boolean isRecentlySent(String message)
-	{
-		message = ChatColor.stripColor(message);
-		message = whatever.matcher(message).replaceAll("");
-		message = tags.matcher(message).replaceAll("");
-
-		//Cleanup expired values. One alternative to this is to schedule a task to remove each time we send a message.
-		long currentTime = System.currentTimeMillis();
-		Iterator<String> sentMessagesIterator = recentlySentMessages.keySet().iterator();
-		while (sentMessagesIterator.hasNext())
-		{
-			String key = sentMessagesIterator.next();
-			if (currentTime - 5000L > recentlySentMessages.get(key))
-				recentlySentMessages.remove(key);
-		}
-
-		return recentlySentMessages.containsKey(message);
-	}
+//	public boolean isRecentlySent(String message)
+//	{
+//		message = ChatColor.stripColor(message);
+//		message = whatever.matcher(message).replaceAll("");
+//		message = tags.matcher(message).replaceAll("");
+//
+//		//Cleanup expired values. One alternative to this is to schedule a task to remove each time we send a message.
+//		long currentTime = System.currentTimeMillis();
+//		Iterator<String> sentMessagesIterator = recentlySentMessages.keySet().iterator();
+//		while (sentMessagesIterator.hasNext())
+//		{
+//			String key = sentMessagesIterator.next();
+//			if (currentTime - 5000L > recentlySentMessages.get(key))
+//				recentlySentMessages.remove(key);
+//		}
+//
+//		return recentlySentMessages.containsKey(message);
+//	}
 }

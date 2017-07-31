@@ -106,7 +106,7 @@ public class SlackSender implements HttpHandler
 		String username = map.get("user_name");
 		if (username != null && username.equals("slackbot"))
 		{
-			if (plugin.isRecentlySent(text))
+			//if (plugin.isRecentlySent(text))
 				return;
 		}
 
