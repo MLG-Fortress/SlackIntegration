@@ -192,6 +192,7 @@ public class Slack extends JavaPlugin
 		text = ChatColor.stripColor(text);
 		json.put("text", text);
 		json.put("username", sender.getName());
+		json.put("parse", "full");
 		if(sender instanceof Player)
 		{
 			json.put("icon_url", "https://minotar.net/avatar/" + sender.getName() + ".png");
@@ -213,7 +214,6 @@ public class Slack extends JavaPlugin
 		text = ChatColor.stripColor(text);
 		json.put("text", text);
 		json.put("username", name);
-		json.put("mrkdwn", false);
 		json.put("parse", "full");
 		if(avatar)
 		{

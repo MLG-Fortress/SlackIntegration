@@ -68,8 +68,8 @@ public class SlackSender implements HttpHandler
 	}
 
 	private Pattern leftAngleBracket = Pattern.compile("&lt;");
-	private Pattern rightAngleBracket = Pattern.compile("&amp;");
-	private Pattern ampersand = Pattern.compile("&gt;");
+	private Pattern rightAngleBracket = Pattern.compile("&gt;");
+	private Pattern ampersand = Pattern.compile("&amp;");
 
 	private void handleSlackMessage(HttpExchange exchange) throws IOException
 	{
