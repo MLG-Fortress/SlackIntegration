@@ -249,7 +249,7 @@ public class Slack extends JavaPlugin
 		message = whatever.matcher(message).replaceAll("");
 		message = tags.matcher(message).replaceAll("");
 
-		//Cleanup expired values. Alternative to this is to schedule a task each time we send a message to remove...
+		//Cleanup expired values. One alternative to this is to schedule a task to remove each time we send a message.
 		long currentTime = System.currentTimeMillis();
 		Iterator<String> sentMessagesIterator = recentlySentMessages.keySet().iterator();
 		while (sentMessagesIterator.hasNext())
