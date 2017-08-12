@@ -61,7 +61,7 @@ public class ServerActivityListener implements Listener
     @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
     private void onKick(PlayerKickEvent event)
     {
-        String quitMessage = "Was kicked for " + event.getReason();
+        String quitMessage = event.getPlayer().getName() + " was kicked for " + event.getReason();
         plugin.sendToSlack(SlackCommandSender.getInstance(), quitMessage);
         kickedPlayers.add(event.getPlayer());
     }
