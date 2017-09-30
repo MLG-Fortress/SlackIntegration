@@ -4,12 +4,15 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
+import org.bukkit.event.player.AsyncPlayerChatEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerKickEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.regex.Pattern;
 
 /**
@@ -39,30 +42,42 @@ public class ServerActivityListener implements Listener
     @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
     private void onJoin(PlayerJoinEvent event)
     {
+        if (event.getPlayer().hasPlayedBefore())
+            return;
+
         String joinMessage = event.getJoinMessage();
         if (joinMessage == null || joinMessage.isEmpty())
-            joinMessage = event.getPlayer().getName() + " IZ BAK 4 MOAR MEINKRAFT!!!!!!1111111111!!!1";
+            joinMessage = "*A wild `" + event.getPlayer().getName() + "` has appeared!*";
         plugin.sendToSlack(SlackCommandSender.getInstance(), joinMessage);
     }
 
-    Set<Player> kickedPlayers = new HashSet<>();
+    private Set<Player> kickedPlayers = new HashSet<>();
+    private Set<Player> playerSentMessage = Collections.newSetFromMap(new ConcurrentHashMap<Player, Boolean>());
 
     @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
     private void onQuit(PlayerQuitEvent event)
     {
-        if (kickedPlayers.remove(event.getPlayer()))
+        if (kickedPlayers.remove(event.getPlayer()) || !playerSentMessage.remove(event.getPlayer()))
             return;
+
         String quitMessage = event.getQuitMessage();
         if (quitMessage == null || quitMessage.isEmpty())
-            quitMessage = event.getPlayer().getName() + " left us in loneliness :c";
+            quitMessage = "`" + event.getPlayer().getName() + "` left";
         plugin.sendToSlack(SlackCommandSender.getInstance(), quitMessage);
     }
 
     @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
     private void onKick(PlayerKickEvent event)
     {
-        String quitMessage = event.getPlayer().getName() + " was kicked for " + event.getReason();
+        String quitMessage = event.getPlayer().getName() + " left bcuz " + event.getReason();
         plugin.sendToSlack(SlackCommandSender.getInstance(), quitMessage);
         kickedPlayers.add(event.getPlayer());
+        playerSentMessage.remove(event.getPlayer()); //cleanup
+    }
+
+    @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
+    private void onChat(AsyncPlayerChatEvent event)
+    {
+        playerSentMessage.add(event.getPlayer());
     }
 }
