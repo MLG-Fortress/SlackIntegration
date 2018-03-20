@@ -44,7 +44,7 @@ public class Slack extends JavaPlugin
 		load();
 
 		PluginManager pm = Bukkit.getPluginManager();
-		pm.registerEvents(new AsyncPlayerChatListener(this), this);
+		//pm.registerEvents(new AsyncPlayerChatListener(this), this);
 		//pm.registerEvents(new ServerActivityListener(this), this);
 		getCommand("slack").setExecutor(new SlackCommand(this));
 

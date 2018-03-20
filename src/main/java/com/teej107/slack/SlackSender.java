@@ -119,7 +119,7 @@ public class SlackSender implements HttpHandler
 			public void run()
 			{
 				plugin.getServer().getPluginManager().callEvent(new MessageSentFromSlackEvent(finalName, finalText));
-				Bukkit.broadcastMessage(broadcast);
+				//Bukkit.broadcastMessage(broadcast);
 			}
 		}.runTask(plugin);
 	}
